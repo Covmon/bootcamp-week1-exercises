@@ -7,25 +7,25 @@ const Pet = require('../models/Pet')
 const run = async () => {
   // Write Queries and Logs Here !!!
 
+
   // Insert yourself in the users table
-  await User.query().insert({
+  const me = await User.query().insert({
     firstName: 'Noah',
-    lastName: 'Covey',
-    id: casual.uuid,
-    email: 'ncovey@college.harvard.edu',
+    lastName: 'Covey III',
+    email: 'ncoveyIII@college.harvard.edu',
     age: 19,
-    created_at: casual.moment,
-    updated_at: casual.moment,
-  })
+  }).returning('*')
+
+  console.log(me)
+
   // Insert a pet belonging to you (get your ID from Postico or DBeaver)
-  await Pet.query().insert({
-    id: casual.uuid,
-    ownerId: '4b8cf1df-839d-4d66-8367-c0259408de76',
+  const myPet = await Pet.query().insert({
+    ownerId: me.id,
     type: casual.random_element(['DOG', 'CAT', 'BIRD', 'FISH', 'ALLIGATOR']),
     name: casual.first_name,
-    created_at: casual.moment,
-    updated_at: casual.moment,
-  })
+  }).returning('*')
+
+  console.log(myPet)
   // -----
   cleanup()
 }
